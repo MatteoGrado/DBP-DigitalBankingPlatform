@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu May 28 15:14:08 CEST 2026
+retries-2.32.19-sources.jar>central=
+retries-2.32.19.jar>central=
+retries-2.32.19.pom>central=

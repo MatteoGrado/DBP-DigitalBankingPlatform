@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Apr 11 01:46:09 CEST 2026
+bcprov-jdk18on-1.77-sources.jar>central=
+bcprov-jdk18on-1.77.jar>central=
+bcprov-jdk18on-1.77.pom>central=

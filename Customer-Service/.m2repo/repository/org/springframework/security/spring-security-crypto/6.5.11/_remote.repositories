@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed Jul 15 00:28:31 CEST 2026
+spring-security-crypto-6.5.11-sources.jar>central=
+spring-security-crypto-6.5.11.jar>central=
+spring-security-crypto-6.5.11.pom>central=

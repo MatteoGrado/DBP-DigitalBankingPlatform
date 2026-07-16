@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed May 27 15:48:54 CEST 2026
+sentry-spring-boot-starter-jakarta-8.27.0-sources.jar>central=
+sentry-spring-boot-starter-jakarta-8.27.0.jar>central=
+sentry-spring-boot-starter-jakarta-8.27.0.pom>central=

@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Jun 20 09:43:20 CEST 2026
+spring-cloud-consul-core-5.0.2-sources.jar>central=
+spring-cloud-consul-core-5.0.2.jar>central=
+spring-cloud-consul-core-5.0.2.pom>central=
