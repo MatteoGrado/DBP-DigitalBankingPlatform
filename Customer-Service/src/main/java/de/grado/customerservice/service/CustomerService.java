@@ -1,6 +1,7 @@
 package de.grado.customerservice.service;
 
 import de.grado.customerservice.dto.CreateCustomer;
+import de.grado.customerservice.event.CustomerCreatedEvent;
 import de.grado.customerservice.model.Customer;
 import de.grado.customerservice.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class CustomerService
 {
     private final CustomerRepository customerRepository;
+    private final CustomerProducer customerProducer;
 
     public List<Customer> getCustomers()
     {
@@ -36,6 +39,32 @@ public class CustomerService
 
     public String createCustomer(CreateCustomer createCustomer)
     {
+        Customer customer = getCustomer(createCustomer);
+
+        Customer savedCustomer = customerRepository.save(customer);
+
+        CustomerCreatedEvent event = new CustomerCreatedEvent(
+                savedCustomer.getAccounts(),
+                savedCustomer.getFirstName(),
+                savedCustomer.getLastName(),
+                savedCustomer.getDateOfBirth(),
+                savedCustomer.getAddress(),
+                savedCustomer.getHouseNumber(),
+                savedCustomer.getZipCode(),
+                savedCustomer.getCity(),
+                savedCustomer.getState(),
+                savedCustomer.getEmail(),
+                savedCustomer.getPhoneNumber(),
+                savedCustomer.getIBAN()
+        );
+        customerProducer.sendCustomerCreated(event);
+
+        return "Customer Created";
+    }
+
+    @Nonnull
+    private static Customer getCustomer(CreateCustomer createCustomer)
+    {
         Customer customer = new Customer();
 
         customer.setAccounts(createCustomer.getAccounts());
@@ -51,7 +80,6 @@ public class CustomerService
         customer.setPhoneNumber(createCustomer.getPhoneNumber());
         customer.setIBAN(createCustomer.getIBAN());
 
-        customerRepository.save(customer);
-        return "Customer Created";
+        return customer;
     }
 }
