@@ -1,4 +1,35 @@
 services:
+  customer-service:
+    build:
+      context: ./Customer-Service
+    image: customer-service:latest
+    container_name: customer-service
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-DBP}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USERNAME:-DB_Admin}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-Sumafelo!}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: admin
+      RABBITMQ_PASSWORD: admin
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
+      CONSUL_ENABLED: "false"
+      CONSUL_DISCOVERY_ENABLED: "false"
+      SENTRY_ENABLED: ${SENTRY_ENABLED:-false}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      kafka:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+
   adminer:
     image: adminer:4.8.1
     container_name: adminer
@@ -16,9 +47,9 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-customer_service}
-      MYSQL_USER: ${MYSQL_USERNAME:-customer}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-customer}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-DBP}
+      MYSQL_USER: ${MYSQL_USERNAME:-DB_Admin}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-Sumafelo!}
     ports:
       - "${MYSQL_PORT:-3306}:3306"
     volumes:
@@ -42,6 +73,30 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
+  kafka:
+    image: bitnamilegacy/kafka:4.0.0-debian-12-r10
+    container_name: kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_CLUSTER_ID: ${KAFKA_CLUSTER_ID:-MkU3OEVBNTcwNTJENDM2Qk}
+      KAFKA_CFG_NODE_ID: "0"
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_LISTENERS: INTERNAL://:9092,EXTERNAL://:29092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:29092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+      KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+      KAFKA_CFG_MIN_INSYNC_REPLICAS: "1"
+    volumes:
+      - kafka_data:/bitnami/kafka
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.5
     container_name: elasticsearch
@@ -58,7 +113,7 @@ services:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
   mailhog:
-    image: mailhog/mailhog:v1.0.1
+    image: axllent/mailpit:latest
     container_name: mailhog
     restart: unless-stopped
     ports:
@@ -89,5 +144,6 @@ volumes:
   elasticsearch_data:
   mysql_data:
   rabbitmq_data:
+  kafka_data:
   redis_data:
   consul_data:
