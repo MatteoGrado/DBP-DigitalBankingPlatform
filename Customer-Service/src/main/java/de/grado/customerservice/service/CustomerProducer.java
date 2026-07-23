@@ -15,6 +15,6 @@ public class CustomerProducer
 
     public void sendCustomerCreated(CustomerCreatedEvent event)
     {
-        kafkaTemplate.send("customer-created", event);
+        kafkaTemplate.send("customer", event);
     }
 }

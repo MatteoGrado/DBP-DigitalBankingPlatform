@@ -1,5 +1,8 @@
 package de.grado.customerservice.model;
 
+import de.grado.customerservice.dto.AccountType;
+import de.grado.customerservice.dto.CardForm;
+import de.grado.customerservice.dto.CardType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +20,8 @@ public class Cards
     private Long id;
 
     private String cardNumber;
-    private String cardType;
+    private CardType cardType;
+    private CardForm cardForm;
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
