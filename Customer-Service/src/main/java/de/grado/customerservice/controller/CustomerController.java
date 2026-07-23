@@ -1,16 +1,16 @@
 package de.grado.customerservice.controller;
 
+import de.grado.customerservice.dto.CreateCustomer;
 import de.grado.customerservice.model.Customer;
 import de.grado.customerservice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -28,9 +28,23 @@ public class CustomerController
     }
 
     @GetMapping("/getCustomer/{firstName}/{lastName}")
-    public List<Customer> getCustomer(@PathVariable String firstName, @PathVariable String lastName)
+    public List<Customer> getCustomerList(@PathVariable String firstName, @PathVariable String lastName)
     {
         log.info("Listed searched Customers");
         return customerService.getCustomerList(firstName, lastName);
+    }
+
+    @GetMapping("/getCustomer/{id}")
+    public Customer getCustomer(@PathVariable BigInteger id)
+    {
+        log.info("Found Customer {}", id);
+        return customerService.getCustomer(id);
+    }
+
+    @PostMapping("/createCustomer")
+    public String createCustomer(@RequestBody CreateCustomer createCustomer)
+    {
+        log.info("Created Customer");
+        return customerService.createCustomer(createCustomer);
     }
 }
