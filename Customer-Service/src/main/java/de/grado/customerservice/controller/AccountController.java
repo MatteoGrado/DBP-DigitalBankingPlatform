@@ -28,7 +28,7 @@ public class AccountController
     }
 
     @PostMapping("/createAccount")
-    @KafkaListener(topics = "customer", groupId = "customer-service")
+    @KafkaListener(topics = "customer", groupId = "customer-service", autoStartup = "${KAFKA_LISTENER_AUTO_STARTUP:false}")
     public void createAccount(@RequestBody CustomerCreatedEvent event)
     {
         log.info("Account created for customer.");

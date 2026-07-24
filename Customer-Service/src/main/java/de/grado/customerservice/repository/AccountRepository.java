@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, BigInteger>
 {
-    List<Account> findById(BigInteger customerId);
-    Optional<Account> findByAccountNumber(String accountNumber);
+    List<Account> findAllByCustomer_Id(BigInteger customerId);
+    Optional<Account> findByAccountNumber(BigInteger accountNumber);
     Optional<Account> findByIBAN(String iban);
 }

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nonnull;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -29,12 +28,13 @@ public class CustomerService
 
     public List<Customer> getCustomerList(String firstName, String lastName)
     {
-        return customerRepository.findByName(firstName, lastName);
+        return customerRepository.findByFirstNameAndLastName(firstName, lastName);
     }
 
     public Customer getCustomer(BigInteger id)
     {
-        return customerRepository.findById(id);
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + id));
     }
 
     public String createCustomer(CreateCustomer createCustomer)
@@ -63,7 +63,6 @@ public class CustomerService
         return "Customer Created";
     }
 
-    @Nonnull
     private static Customer getCustomer(CreateCustomer createCustomer)
     {
         Customer customer = new Customer();

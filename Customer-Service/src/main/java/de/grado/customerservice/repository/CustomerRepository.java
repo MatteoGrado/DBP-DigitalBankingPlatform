@@ -6,11 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long>
+public interface CustomerRepository extends JpaRepository<Customer, BigInteger>
 {
-    List<Customer> findByName(String firstName, String lastName);
-
-    Customer findById(BigInteger id);
+    List<Customer> findByFirstNameAndLastName(String firstName, String lastName);
 }

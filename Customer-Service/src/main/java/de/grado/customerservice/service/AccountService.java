@@ -3,6 +3,7 @@ package de.grado.customerservice.service;
 import de.grado.customerservice.dto.AccountStatus;
 import de.grado.customerservice.event.CustomerCreatedEvent;
 import de.grado.customerservice.model.Account;
+import de.grado.customerservice.model.Cards;
 import de.grado.customerservice.model.Customer;
 import de.grado.customerservice.repository.AccountRepository;
 import de.grado.customerservice.repository.CardsRepository;
@@ -29,12 +30,13 @@ public class AccountService
 
     public List<Account> getAccountForCustomer(BigInteger id)
     {
-        return accountRepository.findById(id);
+        return accountRepository.findAllByCustomer_Id(id);
     }
 
     public String createAccount(CustomerCreatedEvent event)
     {
-        Customer customer = customerRepository.findById(event.customerId());
+        Customer customer = customerRepository.findById(event.customerId())
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + event.customerId()));
 
         Account account = new Account();
 
@@ -44,8 +46,14 @@ public class AccountService
         account.setBIC(BIC);
         account.setBalance(BigDecimal.valueOf(0.00));
         account.setStatus(AccountStatus.CREATED);
+        account.setCards(getCustomerCards(event.customerId()));
 
         accountRepository.save(account);
         return "Account Successfully created.";
+    }
+
+    public List<Cards> getCustomerCards(BigInteger id)
+    {
+        return cardsRepository.findAllByAccount_Id(id);
     }
 }

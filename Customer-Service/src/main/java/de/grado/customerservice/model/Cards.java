@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.math.BigInteger;
 
 @Entity
 @Table(name = "cards")
@@ -16,7 +17,7 @@ public class Cards
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private BigInteger id;
 
     private String cardNumber;
     private CardType cardType;
