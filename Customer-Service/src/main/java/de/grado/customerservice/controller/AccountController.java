@@ -1,14 +1,13 @@
 package de.grado.customerservice.controller;
 
+import de.grado.customerservice.dto.CreateCustomer;
+import de.grado.customerservice.event.CustomerCreatedEvent;
 import de.grado.customerservice.model.Account;
 import de.grado.customerservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -28,9 +27,11 @@ public class AccountController
         return accountService.getAccountForCustomer(id);
     }
 
+    @PostMapping("/createAccount")
     @KafkaListener(topics = "customer", groupId = "customer-service")
-    public void createAccount()
+    public void createAccount(@RequestBody CustomerCreatedEvent event)
     {
-        //TODO: Implement Create Account Method
+        log.info("Account created for customer.");
+        accountService.createAccount(event);
     }
 }

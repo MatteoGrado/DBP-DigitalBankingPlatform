@@ -44,6 +44,7 @@ public class CustomerService
         Customer savedCustomer = customerRepository.save(customer);
 
         CustomerCreatedEvent event = new CustomerCreatedEvent(
+                savedCustomer.getId(),
                 savedCustomer.getAccounts(),
                 savedCustomer.getFirstName(),
                 savedCustomer.getLastName(),

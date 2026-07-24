@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Customer
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private BigInteger id;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Account> accounts;

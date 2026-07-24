@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long>
+public interface AccountRepository extends JpaRepository<Account, BigInteger>
 {
     List<Account> findById(BigInteger customerId);
     Optional<Account> findByAccountNumber(String accountNumber);

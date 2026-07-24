@@ -1,6 +1,5 @@
 package de.grado.customerservice.model;
 
-import de.grado.customerservice.dto.AccountType;
 import de.grado.customerservice.dto.CardForm;
 import de.grado.customerservice.dto.CardType;
 import jakarta.persistence.*;
