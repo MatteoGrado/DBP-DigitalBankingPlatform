@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -58,7 +59,16 @@ public class CustomerService
                 savedCustomer.getPhoneNumber(),
                 savedCustomer.getIBAN()
         );
+
         customerProducer.sendCustomerCreated(event);
+
+        WebClient webClient = (WebClient) WebClient
+                .builder()
+                .build()
+                .get()
+                .uri("http://localhost:8080/api/customer/createAccount")
+                .retrieve()
+                .bodyToMono(Customer.class);
 
         return "Customer Created";
     }
