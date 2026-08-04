@@ -1,0 +1,39 @@
+services:
+
+  consul:
+    image: hashicorp/consul:1.20
+    command: agent -dev -client=0.0.0.0
+    ports:
+      - "8500:8500"
+
+  user-service:
+    build: ./User-Service
+    env_file:
+      - .env
+    depends_on:
+      user-db:
+        condition: service_healthy
+    ports:
+      - "8081"
+
+  user-db:
+    image: mysql:8.4
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${MYSQL_USER_DATABASE}
+      MYSQL_USER: ${MYSQL_USER_USER}
+      MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - user-db-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  user-db-data:
