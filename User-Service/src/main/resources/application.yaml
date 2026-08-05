@@ -1,30 +1,30 @@
 spring:
   application:
     name: User-Service
-
   datasource:
-    url: jdbc:mysql://user-db:3306/db-user?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: ${MYSQL_USERDB_USER}
-    password: ${MYSQL_USERDB_PWD}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://user-db:3306/${MYSQL_USER_DATABASE:db-user}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${MYSQL_USER_USER:db_user}
+    password: ${MYSQL_USER_PWD:db_user_password}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:user-kafka:9092}
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:user-service-login-consumer-group}
   jpa:
     open-in-view: false
-
+    show-sql: false
     hibernate:
       ddl-auto: update
-    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
         jdbc:
           time_zone: UTC
-
   cloud:
     consul:
-      host: localhost
-      port: 8500
+      host: ${CONSUL_HOST:consul}
+      port: ${CONSUL_PORT:8500}
       discovery:
         enabled: true
         register: true
@@ -35,4 +35,9 @@ spring:
         health-check-interval: 10s
 
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
+
+vonage:
+  api-key: ${SMS_API_KEY}
+  api-secret: ${SMS_PROVIDER_SECRET}
+  from: ${SMS_PROVIDER_FROM:DBP}
