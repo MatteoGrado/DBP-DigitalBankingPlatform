@@ -1,15 +1,18 @@
 spring:
   application:
-    name: User-Service
+    name: Customer-Service
+
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://user-db:3306/${MYSQL_USER_DATABASE:db-user}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
-    username: ${MYSQL_USER_USER:db_user}
-    password: ${MYSQL_USER_PWD:db_user_password}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://customer-db:3306/${MYSQL_CUSTOMER_DATABASE:db-customer}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${MYSQL_CUSTOMER_USER:DB_Admin}
+    password: ${MYSQL_CUSTOMER_PWD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     consumer:
-      group-id: ${KAFKA_CONSUMER_GROUP_ID:user-service-login-consumer-group}
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:customer-service-consumer-group}
+
   jpa:
     open-in-view: false
     show-sql: false
@@ -21,6 +24,7 @@ spring:
         format_sql: true
         jdbc:
           time_zone: UTC
+
   cloud:
     consul:
       host: ${CONSUL_HOST:consul}
@@ -28,16 +32,11 @@ spring:
       discovery:
         enabled: true
         register: true
-        service-name: User-Service
-        instance-id: User-Service:${random.value}
+        service-name: Customer-Service
+        instance-id: Customer-Service:${random.value}
         prefer-ip-address: true
         health-check-path: /actuator/health
         health-check-interval: 10s
 
 server:
-  port: ${SERVER_PORT:8081}
-
-vonage:
-  api-key: ${SMS_API_KEY}
-  api-secret: ${SMS_PROVIDER_SECRET}
-  from: ${SMS_PROVIDER_FROM:DBP}
+  port: 8082
