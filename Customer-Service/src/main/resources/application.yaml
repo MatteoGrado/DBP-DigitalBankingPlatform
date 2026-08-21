@@ -3,8 +3,8 @@ spring:
     name: Customer-Service
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://customer-db:3306/${MYSQL_CUSTOMER_DATABASE:db-customer}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
-    username: ${MYSQL_CUSTOMER_USER:DB_Admin}
+    url: jdbc:mysql://customer-db:3306/${MYSQL_CUSTOMER_DATABASE:db-customer}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${MYSQL_CUSTOMER_USER}
     password: ${MYSQL_CUSTOMER_PWD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -19,11 +19,9 @@ spring:
     hibernate:
       ddl-auto: update
     properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
-        jdbc:
-          time_zone: UTC
+      format_sql: true
+      jdbc:
+        time_zone: UTC
 
   cloud:
     consul:
