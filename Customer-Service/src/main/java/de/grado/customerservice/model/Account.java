@@ -20,6 +20,7 @@ public class Account
     private Long id;
 
     private String IBAN;
+    private String accountNumber;
     private BigDecimal balance;
     private String currency;
     private String accountName;

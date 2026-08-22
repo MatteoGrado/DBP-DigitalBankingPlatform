@@ -38,4 +38,18 @@ public class CustomerController
         log.info("Get Customer by ID");
         return customerService.getCustomer(id);
     }
+
+    @GetMapping("/getCustomer/{customerName}")
+    public Optional<Customer> getCustomerByName(@PathVariable String customerName)
+    {
+        log.info("Get Customer by Name");
+        return customerService.getCustomerByName(customerName);
+    }
+
+    @GetMapping("/getCustomer/{accountNumber}")
+    public Optional<Customer> getCustomerByAccountNumber(@PathVariable String accountNumber)
+    {
+        log.info("Get Customer by Account Number");
+        return customerService.getCustomerByAccountNumber(accountNumber);
+    }
 }

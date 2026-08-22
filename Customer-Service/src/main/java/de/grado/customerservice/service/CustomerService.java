@@ -88,4 +88,16 @@ public class CustomerService
         log.info("Get Customer {}", id);
         return customerRepository.findById(id);
     }
+
+    public Optional<Customer> getCustomerByName(String customerName)
+    {
+        log.info("Customer {} found", customerName);
+        return customerRepository.findByCustomerName(customerName);
+    }
+
+    public Optional<Customer> getCustomerByAccountNumber(String accountNumber)
+    {
+        log.info("Found Customer with Account Number {}", accountNumber);
+        return customerRepository.findByAccountsAccountNumber(accountNumber);
+    }
 }
