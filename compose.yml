@@ -98,7 +98,41 @@ services:
       timeout: 5s
       retries: 20
 
+  immo-service:
+    build: ./Immo-Service
+    env_file:
+      - .env
+    depends_on:
+      immo-db:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8083"
+
+  immo-db:
+    image: mysql:8.4
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${MYSQL_IMMO_DATABASE}
+      MYSQL_USER: ${MYSQL_IMMO_USER}
+      MYSQL_PASSWORD: ${MYSQL_IMMO_PWD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3309:3306"
+    volumes:
+      - immo-db-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
 volumes:
   user-db-data:
   kafka_data:
   customer-db-data:
+  immo-db-data:

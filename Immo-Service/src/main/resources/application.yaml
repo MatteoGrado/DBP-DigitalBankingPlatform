@@ -1,3 +1,48 @@
 spring:
   application:
     name: Immo-Service
+
+  datasource:
+    url: jdbc:mysql://immo-db:3306/${MYSQL_IMMO_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${MYSQL_IMMO_USER}
+    password: ${MYSQL_IMMO_PWD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:immo-service-consumer-group}
+
+  jpa:
+    open-in-view: false
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      format_sql: true
+      jdbc:
+        time_zone: UTC
+
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:consul}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        enabled: true
+        register: true
+        service-name: Immo-Service
+        instance-id: Immo-Service:${random.value}
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+
+app:
+  aws:
+    s3:
+      bucket-name: ${AWS_S3_BUCKET:immo-service}
+      region: ${AWS_REGION:eu-central-1}
+      endpoint: ${AWS_S3_ENDPOINT:}
+      path-style-access-enabled: ${AWS_S3_PATH_STYLE_ACCESS_ENABLED:false}
+
+server:
+  port: 8083
