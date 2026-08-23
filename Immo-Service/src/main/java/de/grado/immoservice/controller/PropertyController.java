@@ -21,5 +21,11 @@ public class PropertyController
     public void createPropertyListing(@RequestBody CreateImmoDto createImmoDto)
     {
         String result = immoService.uploadImages(createImmoDto);
+        if (result.equals("SUCCESS")) {
+            immoService.createPropertyInsert(createImmoDto);
+        } else {
+            log.error("Could not upload image listing!");
+            throw new RuntimeException("Something went wrong!");
+        }
     }
 }
