@@ -2,6 +2,7 @@ package de.grado.immoservice.service;
 
 import de.grado.immoservice.config.S3Properties;
 import de.grado.immoservice.dto.CreateImmoDto;
+import de.grado.immoservice.model.Property;
 import de.grado.immoservice.repository.PropertyImagesRepository;
 import de.grado.immoservice.repository.PropertyRepository;
 import io.sentry.Sentry;
@@ -14,6 +15,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +32,17 @@ public class ImmoService
     @Transactional
     public void createPropertyInsert(CreateImmoDto createImmoDto)
     {
+        Property property = new Property();
+
+        property.setAddress(createImmoDto.getAddress());
+        property.setZipCode(createImmoDto.getZipCode());
+        property.setCity(createImmoDto.getCity());
+        property.setCurrentOwner(createImmoDto.getCurrentOwner());
+        property.setCreatedAt(LocalDate.now());
+        property.setPrice(createImmoDto.getPrice());
+        //TODO: How to get the links of the images in here
+
+        propertyRepository.save(property);
     }
 
     public String uploadImages(CreateImmoDto createImmoDto)
@@ -41,10 +54,11 @@ public class ImmoService
 
                 String originalFilename = file.getOriginalFilename();
                 String filename = UUID.randomUUID() + "-" + originalFilename;
+                String storageKey = "images/" + createImmoDto.getAddress() + "/" + filename;
 
                 PutObjectRequest request = PutObjectRequest.builder()
                         .bucket(s3Properties.bucketName())
-                        .key("images/" + filename)
+                        .key(storageKey)
                         .contentType(file.getContentType())
                         .build();
 
