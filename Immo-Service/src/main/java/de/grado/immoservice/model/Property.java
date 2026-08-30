@@ -26,6 +26,7 @@ public class Property
     private String currentOwner;
     private LocalDate createdAt;
     private BigDecimal price;
+    private String imagesUrl;
 
     @OneToMany(mappedBy = "property")
     private List<PropertyImages> propertyImages = new ArrayList<>();

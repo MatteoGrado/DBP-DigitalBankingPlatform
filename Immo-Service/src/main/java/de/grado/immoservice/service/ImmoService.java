@@ -45,7 +45,7 @@ public class ImmoService
         property.setCurrentOwner(createImmoDto.getCurrentOwner());
         property.setCreatedAt(LocalDate.now());
         property.setPrice(createImmoDto.getPrice());
-        //TODO: How to get the links of the images in here
+        property.setImagesUrl(propertyEvent.getImagesUrl());
 
         propertyRepository.save(property);
     }
@@ -63,7 +63,8 @@ public class ImmoService
 
                 PutObjectRequest request = PutObjectRequest.builder()
                         .bucket(s3Properties.bucketName())
-                        .key(storageKey).contentType(file.getContentType())
+                        .key(storageKey)
+                        .contentType(file.getContentType())
                         .build();
 
                 s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
@@ -74,6 +75,7 @@ public class ImmoService
                                 .bucket(s3Properties.bucketName())
                                 .key(storageKey))
                         .toExternalForm();
+
 
                 kafkaTemplate.send("property-images-topic", new PropertyEvent(url));
                 log.info("URL send via Kafka: {}", url);
