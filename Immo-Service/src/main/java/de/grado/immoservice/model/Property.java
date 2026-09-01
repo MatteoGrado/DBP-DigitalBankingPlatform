@@ -1,6 +1,8 @@
 package de.grado.immoservice.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -17,6 +19,7 @@ import java.util.List;
 public class Property
 {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String address;
@@ -26,7 +29,6 @@ public class Property
     private String currentOwner;
     private LocalDate createdAt;
     private BigDecimal price;
-    private String imagesUrl;
 
     @OneToMany(mappedBy = "property")
     private List<PropertyImages> propertyImages = new ArrayList<>();
