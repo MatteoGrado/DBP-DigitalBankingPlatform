@@ -102,4 +102,10 @@ public class ImmoService
             throw new RuntimeException("Something went wrong!", e);
         }
     }
+
+    public List<Property> listProperty()
+    {
+        log.info("Got all Property");
+        return propertyRepository.findAll();
+    }
 }
