@@ -16,6 +16,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,19 +77,16 @@ public class ImmoService
                 String filename = UUID.randomUUID() + "-" + originalFilename;
                 String storageKey = "images/" + createImmoDto.getAddress() + "/" + filename;
 
-                PutObjectRequest request = PutObjectRequest.builder()
-                        .bucket(s3Properties.bucketName())
-                        .key(storageKey)
-                        .contentType(file.getContentType())
-                        .build();
+                PutObjectRequest request = PutObjectRequest.builder().bucket(s3Properties.bucketName()).key(storageKey)
+                        .contentType(file.getContentType()).build();
 
                 s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
                 log.info("Image uploaded: {}", filename);
 
                 String url = s3Client.utilities()
-                        .getUrl(builder -> builder
-                                .bucket(s3Properties.bucketName())
-                                .key(storageKey))
+                        .getUrl(builder ->
+                                builder.bucket(s3Properties.bucketName())
+                                        .key(storageKey))
                         .toExternalForm();
 
                 imageUrls.add(url);
@@ -107,5 +105,9 @@ public class ImmoService
     {
         log.info("Got all Property");
         return propertyRepository.findAll();
+    }
+
+    public Property getProperty(BigInteger id)
+    {
     }
 }

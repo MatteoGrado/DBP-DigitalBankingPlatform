@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -28,5 +29,12 @@ public class PropertyController
     {
         log.info("Listed all Properties");
         return immoService.listProperty();
+    }
+
+    @GetMapping("/getProperty/{id}")
+    public Property getPropertyById(@PathVariable("id") BigInteger id)
+    {
+        log.info("Getting property with id {}", id);
+        return immoService.getProperty(id);
     }
 }
